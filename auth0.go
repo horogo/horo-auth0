@@ -1,40 +1,50 @@
-package auth0
+package hrauth0
+
+import (
+	"net/http"
+	"github.com/dgrijalva/jwt-go"
+)
 
 type Auth0 struct {
-	audience, issuer, cert string
+	audience   []string
+	issuer     string
+	jwkCertURI string
+	signingMethod jwt.SigningMethod
 
-	// If enabled, print additional log info
 	debug bool
-
-	// The minimum interval in seconds for JWKS to refresh
-	certRefreshRate        uint
+	certs certStore
 }
 
 // New creates a new Auth0. The audience, issuer,
 // cert variables are set accordingly to which
 // provided by Auth0
-func New(audience, issuer, cert string) *Auth0 {
-	assert1(audience != "", "audience cannot be empty")
+func New(audience []string, issuer string, jwkCertURI string) *Auth0 {
+	assert1(audience != nil, "audience cannot be nil")
 	assert1(issuer != "", "issuer cannot be empty")
-	assert1(cert != "", "cert cannot be empty")
+	assert1(jwkCertURI != "", "cert cannot be empty")
 	return &Auth0{
-		audience:        audience,
-		issuer:          issuer,
-		cert:            cert,
-		debug:           false,
-		certRefreshRate: 60,
+		audience:   audience,
+		issuer:     issuer,
+		jwkCertURI: jwkCertURI,
+		debug:      false,
+		certs: certStore{
+			store: make(map[string]string),
+		},
+		signingMethod: jwt.SigningMethodRS256,
 	}
 }
 
 // SetDebug turns turn debug logging on or off
 func (au *Auth0) SetDebug(value bool) {
 	au.debug = value
-	au.debugPrint("Set debug to %t\n", value)
+	au.debugf("Set debug to %t\n", value)
 }
 
-// SetCertRefreshRate sets the minimum interval
-// in seconds for JWKS to refresh
-func (au *Auth0) SetCertRefreshRate(value uint) {
-	au.certRefreshRate = value
-	au.debugPrint("Set CertRefreshRate to %t\n", value)
+// Handler return a Horo Handler middleware
+func (au *Auth0) Handler() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		})
+	}
 }
