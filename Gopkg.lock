@@ -2,14 +2,34 @@
 
 
 [[projects]]
-  name = "github.com/dgrijalva/jwt-go"
+  branch = "master"
+  name = "github.com/horogo/horo-log"
   packages = ["."]
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
+  revision = "b59815f7bbe1e4c53b0eb371eef43252961ca582"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = [
+    "ed25519",
+    "ed25519/internal/edwards25519"
+  ]
+  revision = "2c241ca3045ddc354463c376a9515d9f1f1390a4"
+
+[[projects]]
+  name = "gopkg.in/square/go-jose.v2"
+  packages = [
+    ".",
+    "cipher",
+    "json",
+    "jwt"
+  ]
+  revision = "76dd09796242edb5b897103a75df2645c028c960"
+  version = "v2.1.6"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3861144950eb2418c77e6dca61a62fbcd1426f58d8fc83a2eefc547465269a58"
+  inputs-digest = "6fccf9fcf90172a9e5729ac7cfdef5b523e848b55cc21871d63576965ea2fc6a"
   solver-name = "gps-cdcl"
   solver-version = 1
