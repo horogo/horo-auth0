@@ -41,27 +41,23 @@ func New(audience []string, issuer string, jwksURI string) *Auth0 {
 }
 
 // Handler return a Horo Handler middleware
-func (au *Auth0) Handler() func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			claims, err := au.getClaims(r)
-			if err != nil {
-				au.log.Errorln("Cannot extract claims:", err)
-				http.Error(w, "cannot extract auth claims", http.StatusUnauthorized)
-			} else {
-				au.log.Debugln("Subject:", claims.Subject)
-				au.log.Debugln("Scope:", claims.Scope)
+func (au *Auth0) Handler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		claims, err := au.getClaims(r)
+		if err != nil {
+			au.log.Errorln("Cannot extract claims:", err)
+		} else {
+			au.log.Debugln("Subject:", claims.Subject)
+			au.log.Debugln("Scope:", claims.Scope)
 
-				ac := horo.Authentication{
-					Authenticated: true,
-					Subject:       claims.Subject,
-					Authorities:   strings.Split(claims.Scope, " "),
-				}
-
-				r := r.WithContext(context.WithValue(r.Context(), horo.AuthKey, ac))
-
-				next.ServeHTTP(w, r)
+			ac := horo.Authentication{
+				Authenticated: true,
+				Subject:       claims.Subject,
+				Authorities:   strings.Split(claims.Scope, " "),
 			}
-		})
-	}
+
+			r = r.WithContext(context.WithValue(r.Context(), horo.AuthKey, ac))
+		}
+		next.ServeHTTP(w, r)
+	})
 }

@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/horogo/horo"
   packages = ["."]
-  revision = "e8314e3ee14910803993f21621d697b63364769e"
+  revision = "c47eed74e80bc83bb9f5e6e05384e48f25423a22"
 
 [[projects]]
   branch = "master"
