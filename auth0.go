@@ -5,6 +5,9 @@ import (
 	"gopkg.in/square/go-jose.v2"
 	"gopkg.in/square/go-jose.v2/jwt"
 	"github.com/horogo/horo-log"
+	"github.com/horogo/horo"
+	"strings"
+	"context"
 )
 
 type Auth0 struct {
@@ -37,12 +40,6 @@ func New(audience []string, issuer string, jwksURI string) *Auth0 {
 	return auth
 }
 
-// SetDebug turns turn debug logging on or off
-func (au *Auth0) SetLogLevel(level hrlog.Level) {
-	au.log.SetLevel(level)
-	au.log.Infoln("Set log level to", level)
-}
-
 // Handler return a Horo Handler middleware
 func (au *Auth0) Handler() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -50,9 +47,20 @@ func (au *Auth0) Handler() func(http.Handler) http.Handler {
 			claims, err := au.getClaims(r)
 			if err != nil {
 				au.log.Errorln("Cannot extract claims:", err)
+				http.Error(w, "cannot extract auth claims", http.StatusUnauthorized)
 			} else {
 				au.log.Debugln("Subject:", claims.Subject)
 				au.log.Debugln("Scope:", claims.Scope)
+
+				ac := horo.Authentication{
+					Authenticated: true,
+					Subject:       claims.Subject,
+					Authorities:   strings.Split(claims.Scope, " "),
+				}
+
+				r := r.WithContext(context.WithValue(r.Context(), horo.AuthKey, ac))
+
+				next.ServeHTTP(w, r)
 			}
 		})
 	}

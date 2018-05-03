@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/horogo/horo"
+  packages = ["."]
+  revision = "e8314e3ee14910803993f21621d697b63364769e"
+
+[[projects]]
+  branch = "master"
   name = "github.com/horogo/horo-log"
   packages = ["."]
   revision = "b59815f7bbe1e4c53b0eb371eef43252961ca582"
@@ -14,7 +20,7 @@
     "ed25519",
     "ed25519/internal/edwards25519"
   ]
-  revision = "2c241ca3045ddc354463c376a9515d9f1f1390a4"
+  revision = "8b1d31080a7692e075c4681cb2458454a1fe0706"
 
 [[projects]]
   name = "gopkg.in/square/go-jose.v2"
@@ -30,6 +36,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6fccf9fcf90172a9e5729ac7cfdef5b523e848b55cc21871d63576965ea2fc6a"
+  inputs-digest = "c8328993f3999a6008dfe141178a9a22cc517b54fbe8ad52f017fdfff937ae6d"
   solver-name = "gps-cdcl"
   solver-version = 1
